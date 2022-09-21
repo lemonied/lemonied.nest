@@ -4,8 +4,8 @@ import { LoadStrategy } from '@mikro-orm/core';
 
 const config: MikroOrmModuleOptions = {
   type: 'mysql',
-  host: 'localhost',
-  port: 3307,
+  host: process.env.DB_HOST || 'localhost',
+  port: Number(process.env.DB_PORT || 3306),
   user: 'root',
   password: '123456',
   dbName: 'nest-dev-orm',

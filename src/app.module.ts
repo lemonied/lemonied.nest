@@ -6,7 +6,9 @@ import { LoggerModule } from '@/shared/logger';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      envFilePath: './.env.local',
+    }),
     MikroOrmModule.forRoot(),
     UserModule,
     // https://github.com/winstonjs/winston
