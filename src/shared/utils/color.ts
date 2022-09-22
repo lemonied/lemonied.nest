@@ -6,3 +6,13 @@ export const color = {
   magentaBright: (text: string) => `\x1B[95m${text}\x1B[39m`,
   cyanBright: (text: string) => `\x1B[96m${text}\x1B[39m`,
 };
+
+export const statusColor = (status: number) => {
+  if (status < 300) {
+    return color.green(`${status}`);
+  }
+  if (status >= 400 && status < 500) {
+    return color.yellow(`${status}`);
+  }
+  return color.red(`${status}`);
+};

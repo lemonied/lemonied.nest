@@ -7,7 +7,6 @@ export function setupSwagger(app: INestApplication) {
     .setTitle(pkgInfo.name)
     .setDescription(pkgInfo.description)
     .setVersion(pkgInfo.version)
-    .addTag(pkgInfo.author)
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('swagger', app, document);

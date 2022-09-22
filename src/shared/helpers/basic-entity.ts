@@ -1,6 +1,7 @@
 import { PrimaryKey, Property } from '@mikro-orm/core';
+import { BaseEntity } from '@mikro-orm/core';
 
-export class BasicEntity {
+export class BasicEntity<T extends object, PK extends keyof T, P extends string = never> extends BaseEntity<T, PK, P> {
   @PrimaryKey()
   public id!: number;
 
