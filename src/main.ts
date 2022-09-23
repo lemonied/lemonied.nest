@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { setupSwagger } from '@/shared/swagger';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@/shared/pipes';
 import { ValidationException } from '@/shared/exceptions';
 import { LOGGER_PROVIDER, LoggerModule } from '@/shared/logger';
 import * as cookieParser from 'cookie-parser';
@@ -13,7 +13,7 @@ async function bootstrap() {
 
   app.use(cookieParser());
   app.useGlobalPipes(new ValidationPipe({
-    whitelist: false,
+    whitelist: true,
     exceptionFactory: (errors) => new ValidationException(errors),
   }));
   app.useLogger(app.get(LOGGER_PROVIDER));

@@ -1,15 +1,21 @@
-import { IsEmail, IsString, MaxLength } from 'class-validator';
+import { IsEmail, IsOptional, IsString, MaxLength } from 'class-validator';
 
 export class CreateUser {
-  @IsString({ always: false })
-  @MaxLength(50)
-  readonly name: string;
+  @IsOptional()
+  @IsString()
+  @MaxLength(16)
+  readonly nick: string;
+}
 
+export class CreateUserByEmail extends CreateUser{
   @IsEmail()
-  @MaxLength(50)
   readonly email: string;
 
   @IsString()
-  @MaxLength(50)
+  @MaxLength(32)
   readonly password: string;
+}
+
+export class CreateSuperAdminByEmail extends CreateUserByEmail {
+
 }

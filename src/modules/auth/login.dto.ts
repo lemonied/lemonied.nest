@@ -1,11 +1,13 @@
-import { IsString } from 'class-validator';
+import { IsEmail, IsString } from 'class-validator';
 
 class LoginInput {
-  @IsString()
-  readonly email: string;
-
   @IsString()
   readonly password: string;
 }
 
-export { LoginInput };
+class LoginByEmail extends LoginInput {
+  @IsEmail()
+  readonly email: string;
+}
+
+export { LoginByEmail };

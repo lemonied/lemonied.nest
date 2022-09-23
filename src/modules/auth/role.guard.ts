@@ -1,7 +1,8 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { UserRoles } from '@/modules/user/user.roles';
-import { ROLES_KEY } from './auth.decorator';
+import { POWER_KEY } from './auth.decorator';
+import { JwtPayload } from '@/modules/auth';
+import { RoleTypes } from '@/modules/role';
 
 @Injectable()
 class RoleGuard implements CanActivate {
@@ -9,15 +10,15 @@ class RoleGuard implements CanActivate {
     private reflector: Reflector,
   ) {}
   canActivate(context: ExecutionContext) {
-    const requiredRoles = this.reflector.getAllAndOverride<UserRoles[]>(ROLES_KEY, [
+    const requiredPower = this.reflector.getAllAndOverride<boolean>(POWER_KEY, [
       context.getHandler(),
       context.getClass(),
     ]);
-    if (!requiredRoles) {
+    if (!requiredPower) {
       return true;
     }
-    const { user } = context.switchToHttp().getRequest();
-    return requiredRoles.some(role => user.role === role);
+    const user = context.switchToHttp().getRequest().user as JwtPayload;
+    return user.roles.includes(RoleTypes.SuperAdmin);
   }
 }
 

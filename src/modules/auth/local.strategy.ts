@@ -16,12 +16,12 @@ class LocalStrategy extends PassportStrategy(Strategy, 'local') {
     });
   }
 
-  public async validate(req: Request, email: string, password: string) {
-    const user = await this.authService.validateUser(email, password);
-    if (!user) {
+  public async validate(req: Request, identifier: string, password: string) {
+    const account = await this.authService.validateUser(identifier, password);
+    if (!account) {
       throw new UnauthorizedException();
     }
-    return user;
+    return account;
   }
 }
 

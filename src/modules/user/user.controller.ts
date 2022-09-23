@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUser } from './user.dto';
+import { CreateSuperAdminByEmail } from './user.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('User')
@@ -11,7 +11,7 @@ export class UserController {
   ) {}
 
   @Post('create')
-  public async create(@Body() body: CreateUser) {
-    return await this.userService.create(body);
+  public async create(@Body() body: CreateSuperAdminByEmail) {
+    return await this.userService.createSuperAdmin(body);
   }
 }

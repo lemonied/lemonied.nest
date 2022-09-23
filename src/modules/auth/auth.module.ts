@@ -7,11 +7,13 @@ import { LocalStrategy } from './local.strategy';
 import { ConfigService } from '@/config';
 import { JwtStrategy } from './jwt.strategy';
 import { AuthController } from './auth.controller';
+import { AccountModule } from '@/modules/account';
 
 @Global()
 @Module({
   imports: [
     UserModule,
+    AccountModule,
     PassportModule.register({
       defaultStrategy: 'jwt',
     }),

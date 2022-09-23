@@ -18,4 +18,7 @@ npx mikro-orm schema:create -r
 ## 更新表
 ```bash
 npx mikro-orm schema:update -r
+
+# 只输出sql
+npx mikro-orm schema:update --dump
 ```
