@@ -1,19 +1,19 @@
 import { Collection, Entity, Enum, ManyToMany, Property } from '@mikro-orm/core';
 import { BasicEntity } from '@/shared/orm';
 import { Expose } from 'class-transformer';
-import { PermissionType } from './permission.type';
-import { RoleEntity } from '@/modules/role';
+import { AccessType } from '@/modules/access';
+import { RoleEntity } from './role.entity';
 
-@Entity({ tableName: 'permissions' })
-class PermissionEntity extends BasicEntity<PermissionEntity, 'id'>{
+@Entity({ tableName: 'accesses' })
+class AccessEntity extends BasicEntity<AccessEntity, 'id'>{
 
   @Expose()
   @Property({ comment: '资源名称' })
   public name!: string;
 
   @Expose()
-  @Enum({ items: () => PermissionType, comment: '资源类型' })
-  public type = PermissionType.Api;
+  @Enum({ items: () => AccessType, comment: '资源类型' })
+  public type = AccessType.Api;
 
   @Expose()
   @Property({ comment: '资源内容', nullable: true })
@@ -23,10 +23,10 @@ class PermissionEntity extends BasicEntity<PermissionEntity, 'id'>{
   @ManyToMany({ entity: () => RoleEntity, comment: '关联角色' })
   public roles = new Collection<RoleEntity>(this);
 
-  constructor(data: Partial<PermissionEntity>) {
+  constructor(data: Partial<AccessEntity>) {
     super();
     Object.assign(this, data);
   }
 }
 
-export { PermissionEntity };
+export { AccessEntity };

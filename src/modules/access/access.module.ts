@@ -3,6 +3,6 @@ import { Module } from '@nestjs/common';
 @Module({
   imports: [],
 })
-class PermissionModule {}
+class AccessModule {}
 
-export { PermissionModule };
+export { AccessModule };

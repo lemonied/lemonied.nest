@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { EntityManager, FilterQuery } from '@mikro-orm/core';
-import { AccountEntity } from './account.entity';
+import { AccountEntity } from '@/entities';
 
 @Injectable()
 class AccountService {

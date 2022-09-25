@@ -1,8 +1,8 @@
 import { Entity, Enum, ManyToOne, Property } from '@mikro-orm/core';
 import { BasicEntity } from '@/shared/orm';
 import { Expose } from 'class-transformer';
-import { AccountType } from './account.type';
-import { UserEntity } from '@/modules/user';
+import { AccountType } from '@/modules/account';
+import { UserEntity } from './user.entity';
 
 @Entity({ tableName: 'accounts' })
 class AccountEntity extends BasicEntity<AccountEntity, 'id'>{

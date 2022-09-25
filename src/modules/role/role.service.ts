@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { EntityManager } from '@mikro-orm/mysql';
 import { CreateRole } from './role.dto';
-import { RoleEntity } from './role.entity';
+import { RoleEntity } from '@/entities';
 import { FilterQuery } from '@mikro-orm/core';
 
 @Injectable()

@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { UserEntity } from './user.entity';
+import { UserEntity, AccountEntity, RoleEntity } from '@/entities';
 import { CreateSuperAdminByEmail } from './user.dto';
 import { EntityManager } from '@mikro-orm/mysql';
 import { FilterQuery } from '@mikro-orm/core';
-import { AccountEntity, AccountType } from '@/modules/account';
+import { AccountType } from '@/modules/account';
 import * as bcrypt from 'bcrypt';
-import { RoleEntity, RoleService, RoleTypes } from '@/modules/role';
+import { RoleService, RoleTypes } from '@/modules/role';
 
 @Injectable()
 export class UserService {

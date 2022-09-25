@@ -13,8 +13,8 @@ const config: MikroOrmModuleOptions = {
   user: 'root',
   password: '123456',
   dbName: 'nest-dev-orm',
-  entities: ['dist/modules/**/*.entity.js'],
-  entitiesTs: ['src/modules/**/*.entity.ts'],
+  entities: ['dist/entities/*.entity.js'],
+  entitiesTs: ['src/entities/*.entity.ts'],
   debug: true,
   // https://mikro-orm.io/docs/loading-strategies
   loadStrategy: LoadStrategy.JOINED,

@@ -1,8 +1,8 @@
 import { Collection, Entity, ManyToMany, Property } from '@mikro-orm/core';
 import { BasicEntity } from '@/shared/orm';
 import { Expose } from 'class-transformer';
-import { UserEntity } from '@/modules/user';
-import { PermissionEntity } from '@/modules/permission';
+import { UserEntity } from './user.entity';
+import { AccessEntity } from './access.entity';
 
 @Entity({ tableName: 'roles' })
 class RoleEntity extends BasicEntity<RoleEntity, 'id'>{
@@ -19,8 +19,8 @@ class RoleEntity extends BasicEntity<RoleEntity, 'id'>{
   public users = new Collection<UserEntity>(this);
 
   @Expose()
-  @ManyToMany({ entity: () => PermissionEntity, mappedBy: permission => permission.roles, comment: '拥有的权限' })
-  public permissions = new Collection<PermissionEntity>(this);
+  @ManyToMany({ entity: () => AccessEntity, mappedBy: access => access.roles, comment: '拥有的权限' })
+  public accesses = new Collection<AccessEntity>(this);
 
   constructor(data: Partial<RoleEntity>) {
     super();

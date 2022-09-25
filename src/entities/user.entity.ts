@@ -1,8 +1,7 @@
 import { Collection, Entity, ManyToMany, OneToMany, Property } from '@mikro-orm/core';
 import { BasicEntity } from '@/shared/orm';
 import { Expose } from 'class-transformer';
-import { AccountEntity } from '@/modules/account';
-import { RoleEntity } from '@/modules/role';
+import { AccountEntity, RoleEntity } from '@/entities';
 
 // https://mikro-orm.io/docs/decorators
 @Entity({ tableName: 'users' })

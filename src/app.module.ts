@@ -1,15 +1,16 @@
 import { ClassSerializerInterceptor, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { UserEntity, UserModule } from '@/modules/user';
+import { UserModule } from '@/modules/user';
 import { LoggerModule } from '@/shared/logger';
 import { ConfigModule } from '@/config';
 import { APP_FILTER, APP_INTERCEPTOR, Reflector } from '@nestjs/core';
 import { ExceptionFilter } from '@/shared/filters';
 import { LoggingMiddleware } from '@/shared/middlewares';
 import { AuthModule } from '@/modules/auth';
-import { RoleEntity, RoleModule } from '@/modules/role';
-import { PermissionEntity, PermissionModule } from '@/modules/permission';
-import { AccountEntity, AccountModule } from '@/modules/account';
+import { RoleModule } from '@/modules/role';
+import { AccessModule } from '@/modules/access';
+import { AccountModule } from '@/modules/account';
+import { UserEntity, RoleEntity, AccessEntity, AccountEntity } from '@/entities';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { AccountEntity, AccountModule } from '@/modules/account';
     MikroOrmModule.forRoot(),
     MikroOrmModule.forFeature([
       AccountEntity,
-      PermissionEntity,
+      AccessEntity,
       RoleEntity,
       UserEntity,
     ]),
@@ -25,7 +26,7 @@ import { AccountEntity, AccountModule } from '@/modules/account';
     UserModule,
     AuthModule,
     RoleModule,
-    PermissionModule,
+    AccessModule,
     AccountModule,
   ],
   controllers: [],

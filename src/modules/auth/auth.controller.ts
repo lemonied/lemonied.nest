@@ -5,7 +5,7 @@ import { Response } from 'express';
 import { User } from './auth.decorator';
 import { LoginByEmail } from './login.dto';
 import { LocalGuard } from './local.guard';
-import { AccountEntity } from '@/modules/account';
+import { AccountEntity } from '@/entities';
 
 @ApiTags('Auth')
 @Controller('auth')
