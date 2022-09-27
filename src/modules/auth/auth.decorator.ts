@@ -6,19 +6,19 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { JwtGuard } from './jwt.guard';
-import { RoleGuard } from './role.guard';
+import { AccessGuard } from './access.guard';
 
 export const User = createParamDecorator((data: unknown, ctx: ExecutionContext) => {
   const request = ctx.switchToHttp().getRequest();
   return request.user;
 });
 
-export const POWER_KEY = Symbol('power');
+export const ACCESS_KEY = Symbol('access');
 /**
  * @description 装饰器聚合
  * @see https://docs.nestjs.com/custom-decorators#decorator-composition
  */
-export const Power = () => applyDecorators(
-  SetMetadata(POWER_KEY, true),
-  UseGuards(JwtGuard, RoleGuard),
+export const Access = (...roles: string[]) => applyDecorators(
+  SetMetadata(ACCESS_KEY, roles),
+  UseGuards(JwtGuard, AccessGuard),
 );

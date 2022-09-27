@@ -11,6 +11,7 @@ import { RoleModule } from '@/modules/role';
 import { AccessModule } from '@/modules/access';
 import { AccountModule } from '@/modules/account';
 import { UserEntity, RoleEntity, AccessEntity, AccountEntity } from '@/entities';
+import { OperationModule } from '@/modules/operation';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { UserEntity, RoleEntity, AccessEntity, AccountEntity } from '@/entities'
       UserEntity,
     ]),
     LoggerModule.forRoot(),
+    OperationModule,
     UserModule,
     AuthModule,
     RoleModule,

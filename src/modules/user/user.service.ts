@@ -5,33 +5,38 @@ import { EntityManager } from '@mikro-orm/mysql';
 import { FilterQuery } from '@mikro-orm/core';
 import { AccountType } from '@/modules/account';
 import * as bcrypt from 'bcrypt';
-import { RoleService, RoleTypes } from '@/modules/role';
+import { RoleTypes } from '@/modules/role';
 
 @Injectable()
 export class UserService {
   constructor(
     private em: EntityManager,
-    private roleService: RoleService,
   ) {}
   public async createSuperAdmin(body: CreateSuperAdminByEmail) {
     const { email, password, ...extra } = body;
-    const user = new UserEntity(extra);
-    const hash = bcrypt.hashSync(password, 10);
-    user.accounts.add(
-      new AccountEntity({
-        type: AccountType.Email,
-        identifier: email,
-        password: hash,
-      }),
-    );
-    let role = await this.roleService.findOne({ name: RoleTypes.SuperAdmin });
-    if (!role) {
-      role = new RoleEntity({ name: RoleTypes.SuperAdmin });
-    }
-    user.roles.add(role);
-    return await this.em.persist(user).flush();
+    return await this.em.transactional(async (em) => {
+      const user = new UserEntity(extra);
+      const hash = bcrypt.hashSync(password, 10);
+      user.accounts.add(
+        new AccountEntity({
+          type: AccountType.Email,
+          identifier: email,
+          password: hash,
+        }),
+      );
+      const role = await em.findOne(RoleEntity, { code: RoleTypes.SuperAdmin });
+      if (role) {
+        user.roles.add(role.toReference());
+      } else {
+        user.roles.add(new RoleEntity({ code: RoleTypes.SuperAdmin }));
+      }
+      await em.persist(user).flush();
+    });
   }
   public async findOne(query: FilterQuery<UserEntity>) {
-    return await this.em.findOne(UserEntity, query );
+    return await this.em.findOne(UserEntity, query, { populate: ['roles'] });
+  }
+  public async count(query?: FilterQuery<UserEntity>) {
+    return await this.em.count(UserEntity, query);
   }
 }

@@ -7,7 +7,7 @@ import {
   Inject,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
-import { ValidationException } from '@/shared/exceptions';
+import { ExpiredException, ValidationException } from '@/shared/exceptions';
 import { LOGGER_PROVIDER, LoggerService } from '@/shared/logger';
 import { ValidationError as MikroValidationError, DriverException } from '@mikro-orm/core';
 import { Response } from 'express';
@@ -31,6 +31,13 @@ class ExceptionFilter implements NestExceptionFilter {
         return response.status(status).json({
           code: status,
           error: exception.errors,
+          message,
+        });
+      }
+      if (exception instanceof ExpiredException) {
+        return response.status(status).clearCookie('jwt_token').json({
+          code: status,
+          error: message,
           message,
         });
       }

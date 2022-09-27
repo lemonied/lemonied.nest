@@ -9,7 +9,16 @@ class AccountService {
   ) {}
 
   public async findOne(query: FilterQuery<AccountEntity>) {
-    return await this.em.findOne(AccountEntity, query);
+    return await this.em.findOne(AccountEntity, query, { populate: ['user'] });
+  }
+
+  public async updateOne(query: FilterQuery<AccountEntity>, data: Partial<AccountEntity>) {
+    const item = await this.em.findOne(AccountEntity, query);
+    if (item) {
+      item.assign(data);
+      return await this.em.persist(item).flush();
+    }
+    return null;
   }
 
 }

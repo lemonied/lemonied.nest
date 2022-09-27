@@ -1,16 +1,24 @@
 import { Collection, Entity, ManyToMany, Property } from '@mikro-orm/core';
-import { BasicEntity } from '@/shared/orm';
+import { OperationBasicEntity } from '@/orm';
 import { Expose } from 'class-transformer';
 import { UserEntity } from './user.entity';
 import { AccessEntity } from './access.entity';
 
 @Entity({ tableName: 'roles' })
-class RoleEntity extends BasicEntity<RoleEntity, 'id'>{
-  @Property({ length: 32, comment: '角色名', unique: true })
+class RoleEntity extends OperationBasicEntity<RoleEntity, 'id'>{
+  @Property({ length: 64, comment: '角色名称', nullable: true })
   @Expose()
-  public name!: string;
+  public name?: string;
 
-  @Property({ comment: '是否可用' })
+  @Property({ length: 128, comment: '角色描述', nullable: true })
+  @Expose()
+  public description?: string;
+
+  @Property({ length: 32, comment: '角色标识', unique: true })
+  @Expose()
+  public code!: string;
+
+  @Property({ comment: '是否可用', type: 'boolean' })
   @Expose()
   public available = true;
 

@@ -1,11 +1,12 @@
 import { Collection, Entity, ManyToMany, OneToMany, Property } from '@mikro-orm/core';
-import { BasicEntity } from '@/shared/orm';
+import { OperationBasicEntity } from '@/orm';
 import { Expose } from 'class-transformer';
-import { AccountEntity, RoleEntity } from '@/entities';
+import { AccountEntity } from './account.entity';
+import { RoleEntity } from './role.entity';
 
 // https://mikro-orm.io/docs/decorators
 @Entity({ tableName: 'users' })
-export class UserEntity extends BasicEntity<UserEntity, 'id'> {
+export class UserEntity extends OperationBasicEntity<UserEntity, 'id'> {
   @Expose()
   @Property({ length: 64, nullable: true, comment: '用户昵称' })
   public nick?: string;
@@ -14,7 +15,7 @@ export class UserEntity extends BasicEntity<UserEntity, 'id'> {
   public accounts = new Collection<AccountEntity>(this);
 
   @Expose()
-  @Property({ comment: '用户是否锁定' })
+  @Property({ comment: '用户是否锁定', type: 'boolean' })
   public locked = false;
 
   @Expose()

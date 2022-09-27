@@ -5,7 +5,7 @@ import { Response } from 'express';
 import { User } from './auth.decorator';
 import { LoginByEmail } from './login.dto';
 import { LocalGuard } from './local.guard';
-import { AccountEntity } from '@/entities';
+import { JwtPayload } from './jwt.payload';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -18,10 +18,10 @@ class AuthController {
   @Post('login')
   @ApiBody({ type: LoginByEmail })
   @UseGuards(LocalGuard)
-  async login(@User() account: AccountEntity, @Res({ passthrough: true }) res: Response) {
-    const payload = await this.authService.login(account);
-    res.cookie('jwt_token', payload.access_token, { httpOnly: true });
-    return payload;
+  async login(@User() payload: JwtPayload, @Res({ passthrough: true }) res: Response) {
+    const dto = await this.authService.login(payload);
+    res.cookie('jwt_token', dto.access_token, { httpOnly: true });
+    return dto;
   }
 }
 

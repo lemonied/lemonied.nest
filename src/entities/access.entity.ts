@@ -1,11 +1,11 @@
 import { Collection, Entity, Enum, ManyToMany, Property } from '@mikro-orm/core';
-import { BasicEntity } from '@/shared/orm';
+import { OperationBasicEntity } from '@/orm';
 import { Expose } from 'class-transformer';
 import { AccessType } from '@/modules/access';
 import { RoleEntity } from './role.entity';
 
 @Entity({ tableName: 'accesses' })
-class AccessEntity extends BasicEntity<AccessEntity, 'id'>{
+class AccessEntity extends OperationBasicEntity<AccessEntity, 'id'>{
 
   @Expose()
   @Property({ comment: '资源名称' })

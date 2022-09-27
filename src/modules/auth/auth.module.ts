@@ -2,18 +2,14 @@ import { Global, Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
-import { UserModule } from '@/modules/user';
 import { LocalStrategy } from './local.strategy';
 import { ConfigService } from '@/config';
 import { JwtStrategy } from './jwt.strategy';
 import { AuthController } from './auth.controller';
-import { AccountModule } from '@/modules/account';
 
 @Global()
 @Module({
   imports: [
-    UserModule,
-    AccountModule,
     PassportModule.register({
       defaultStrategy: 'jwt',
     }),
@@ -21,7 +17,7 @@ import { AccountModule } from '@/modules/account';
       useFactory: (config: ConfigService) => {
         return {
           secret: config.jwtToken,
-          signOptions: { expiresIn: '60s' },
+          signOptions: { expiresIn: '1h' },
         };
       },
       inject: [ConfigService],

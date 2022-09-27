@@ -1,11 +1,11 @@
 import { Entity, Enum, ManyToOne, Property } from '@mikro-orm/core';
-import { BasicEntity } from '@/shared/orm';
+import { OperationBasicEntity } from '@/orm';
 import { Expose } from 'class-transformer';
 import { AccountType } from '@/modules/account';
 import { UserEntity } from './user.entity';
 
 @Entity({ tableName: 'accounts' })
-class AccountEntity extends BasicEntity<AccountEntity, 'id'>{
+class AccountEntity extends OperationBasicEntity<AccountEntity, 'id'>{
   @Expose()
   @Property({ unique: true, comment: '账户名', length: 64 })
   public identifier!: string;
@@ -21,8 +21,11 @@ class AccountEntity extends BasicEntity<AccountEntity, 'id'>{
   @ManyToOne({ entity: () => UserEntity, comment: '关联用户' })
   public user!: UserEntity;
 
+  @Property({ length: 128, nullable: true, comment: '登录校验' })
+  public validation?: string;
+
   @Expose()
-  @Property({ comment: '是否锁定' })
+  @Property({ comment: '是否锁定', type: 'boolean' })
   public locked = false;
 
   constructor(data: Partial<AccountEntity>) {

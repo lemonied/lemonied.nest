@@ -1,33 +1,54 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { JwtPayload } from './jwt.payload';
-import { AccountEntity } from '@/entities';
-import { AccountService } from '@/modules/account';
+import { AccountEntity, UserEntity } from '@/entities';
 import * as bcrypt from 'bcrypt';
-import { RoleTypes } from '@/modules/role';
+import { randomStr } from '@/shared/utils';
+import { ExpiredException } from '@/shared/exceptions';
+import { EntityManager } from '@mikro-orm/mysql';
+import { JwtPayload } from './jwt.payload';
+import { LoginResponse } from './login.dto';
 
 @Injectable()
 class AuthService {
   constructor(
-    private accountService: AccountService,
     private jwtService: JwtService,
+    private em: EntityManager,
   ) {}
-  public async validateUser(identifier: string, password: string) {
-    const account = await this.accountService.findOne({ identifier });
+
+  // LocalStrategy
+  public async validateUser(identifier: string, password: string): Promise<JwtPayload> {
+    const account = await this.em.findOne(AccountEntity, { identifier }, { populate: ['user'] });
     if (account && bcrypt.compareSync(password, account.password)) {
-      return account;
+      if (!account.validation) {
+        account.validation = randomStr(Date.now());
+        await this.em.persistAndFlush(account);
+      }
+      return {
+        userId: account.user.id,
+        accountId: account.id,
+        validation: account.validation,
+      };
     }
-    return null;
+    throw new UnauthorizedException();
   }
-  public async login(account: AccountEntity) {
-    const payload: JwtPayload = {
-      type: account.type,
-      id: account.id,
-      identifier: account.identifier,
-      nick: account.user.nick,
-      roles: account.user.roles.toJSON().map(v => v.name) as RoleTypes[],
-    };
-    return { access_token: this.jwtService.sign(payload) };
+
+  // JwtStrategy
+  public async validateJwt(payload: JwtPayload) {
+    const user = await this.em.findOne(UserEntity, { id: payload.userId }, { populate: ['roles'] });
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+    const account = await this.em.findOne(AccountEntity, { id: payload.accountId });
+    if (account && account.validation === payload.validation) {
+      return user;
+    }
+    throw new ExpiredException();
+  }
+
+  public async login(payload: JwtPayload) {
+    return new LoginResponse({
+      access_token: this.jwtService.sign(payload),
+    });
   }
 }
 
