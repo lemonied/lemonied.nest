@@ -13,9 +13,10 @@ class JwtGuard extends AuthGuard('jwt') {
     const em = RequestContext.getEntityManager();
     return handle.then(bool => {
       const request: Request = context.switchToHttp().getRequest();
-      console.log(request.originalUrl, request.baseUrl, request.url, request.path, request.route);
       const user = request.user as UserEntity;
-      em && em.setFilterParams('userRef', user ? { id: user.id } : undefined);
+      if (em && user) {
+        em.setFilterParams('userRef', { id: user.id });
+      }
       return bool;
     });
   }

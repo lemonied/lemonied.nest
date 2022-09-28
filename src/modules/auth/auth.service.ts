@@ -20,6 +20,7 @@ class AuthService {
     const account = await this.em.findOne(AccountEntity, { identifier, locked: false, user: { locked: false } }, { populate: ['user'] });
     if (account && bcrypt.compareSync(password, account.password)) {
       if (!account.validation) {
+        this.em.setFilterParams('userRef', { id: account.user.id });
         account.validation = randomStr(Date.now());
         await this.em.persistAndFlush(account);
       }
@@ -35,14 +36,17 @@ class AuthService {
   // JwtStrategy
   public async validateJwt(payload: JwtPayload) {
     const user = await this.em.findOne(UserEntity, { id: payload.userId, locked: false }, {
-      populate: ['roles'],
-      populateWhere: { roles: { available: true } },
+      populate: ['roles', 'accounts'],
+      populateWhere: {
+        roles: { available: true },
+        accounts: { id: payload.accountId, locked: false },
+      },
     });
-    if (!user) {
+    if (!user || !user.accounts.length) {
       throw new UnauthorizedException();
     }
-    const account = await this.em.findOne(AccountEntity, { id: payload.accountId, locked: false });
-    if (account && account.validation === payload.validation) {
+    const account = user.accounts.getItems()[0];
+    if (account.validation === payload.validation) {
       return user;
     }
     throw new ExpiredException();

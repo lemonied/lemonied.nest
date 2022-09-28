@@ -10,9 +10,9 @@ const config: MikroOrmModuleOptions = {
   type: 'mysql',
   host: configService.dbHost,
   port: configService.dbPort,
-  user: 'root',
-  password: '123456',
-  dbName: 'nest-dev-orm',
+  user: configService.dbUser,
+  password: configService.dbPassword,
+  dbName: configService.dbName,
   entities: ['dist/entities/*.entity.js'],
   entitiesTs: ['src/entities/*.entity.ts'],
   debug: true,
@@ -20,7 +20,7 @@ const config: MikroOrmModuleOptions = {
   loadStrategy: LoadStrategy.JOINED,
   // https://mikro-orm.io/docs/logging#highlighters
   highlighter: new SqlHighlighter(),
-  registerRequestContext: false, // disable automatic middleware
+  registerRequestContext: true,
   logger: message => LoggerModule.getLogger().debug(message, 'MikroOrmLog'),
 };
 
