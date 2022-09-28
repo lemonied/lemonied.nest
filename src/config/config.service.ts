@@ -15,6 +15,7 @@ class ConfigService {
   public readonly dbPort = Number(process.env.DB_PORT || 3306);
   public readonly dbHost = process.env.DB_HOST;
   public readonly jwtToken = '123';
+  public readonly prefix = process.env.BASE_PREFIX || '/api';
   public get isProduction() {
     return this.mode === 'production';
   }

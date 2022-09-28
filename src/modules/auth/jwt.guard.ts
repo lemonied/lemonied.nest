@@ -3,6 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { RequestContext } from '@mikro-orm/core';
 import { isObservable, lastValueFrom } from 'rxjs';
 import { Request } from 'express';
+import { UserEntity } from '@/entities';
 
 @Injectable()
 class JwtGuard extends AuthGuard('jwt') {
@@ -12,7 +13,9 @@ class JwtGuard extends AuthGuard('jwt') {
     const em = RequestContext.getEntityManager();
     return handle.then(bool => {
       const request: Request = context.switchToHttp().getRequest();
-      em && em.setFilterParams('user', request.user);
+      console.log(request.originalUrl, request.baseUrl, request.url, request.path, request.route);
+      const user = request.user as UserEntity;
+      em && em.setFilterParams('userRef', user ? { id: user.id } : undefined);
       return bool;
     });
   }

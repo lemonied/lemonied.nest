@@ -10,7 +10,7 @@ class LocalStrategy extends PassportStrategy(Strategy, 'local') {
     private authService: AuthService,
   ) {
     super({
-      usernameField: 'email',
+      usernameField: 'identifier',
       passwordField: 'password',
       passReqToCallback: true,
     });

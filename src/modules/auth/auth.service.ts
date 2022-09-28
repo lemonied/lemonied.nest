@@ -17,7 +17,7 @@ class AuthService {
 
   // LocalStrategy
   public async validateUser(identifier: string, password: string): Promise<JwtPayload> {
-    const account = await this.em.findOne(AccountEntity, { identifier }, { populate: ['user'] });
+    const account = await this.em.findOne(AccountEntity, { identifier, locked: false, user: { locked: false } }, { populate: ['user'] });
     if (account && bcrypt.compareSync(password, account.password)) {
       if (!account.validation) {
         account.validation = randomStr(Date.now());
@@ -34,11 +34,14 @@ class AuthService {
 
   // JwtStrategy
   public async validateJwt(payload: JwtPayload) {
-    const user = await this.em.findOne(UserEntity, { id: payload.userId }, { populate: ['roles'] });
+    const user = await this.em.findOne(UserEntity, { id: payload.userId, locked: false }, {
+      populate: ['roles'],
+      populateWhere: { roles: { available: true } },
+    });
     if (!user) {
       throw new UnauthorizedException();
     }
-    const account = await this.em.findOne(AccountEntity, { id: payload.accountId });
+    const account = await this.em.findOne(AccountEntity, { id: payload.accountId, locked: false });
     if (account && account.validation === payload.validation) {
       return user;
     }

@@ -13,9 +13,9 @@ class OperationSubscriber implements EventSubscriber {
   // https://mikro-orm.io/docs/events#using-onflush-event
   async onFlush(args: FlushEventArgs) {
     const changeSets = args.uow.getChangeSets();
-    const user = args.em.getFilterParams('user') as (UserEntity | undefined);
+    const userRef = args.em.getFilterParams('userRef') as ({ id: number; } | undefined);
     // https://mikro-orm.io/docs/entity-helper
-    const ref = user ? args.em.getReference<UserEntity>(UserEntity, user.id) : null;
+    const ref = userRef ? args.em.getReference<UserEntity>(UserEntity, userRef.id) : null;
     for (let i = 0; i < changeSets.length; i += 1) {
       const cs = changeSets[i];
       if (cs.entity instanceof OperationBasicEntity) {
@@ -31,12 +31,12 @@ class OperationSubscriber implements EventSubscriber {
   }
   async afterFlush(args: FlushEventArgs) {
     const changeSets = args.uow.getChangeSets();
-    const user = args.em.getFilterParams('user') as (UserEntity | undefined);
+    const userRef = args.em.getFilterParams('userRef') as ({ id: number; } | undefined);
+    const nem = args.em.fork();
     for (let i = 0; i < changeSets.length; i += 1) {
       const cs = changeSets[i];
       if (cs.entity instanceof OperationBasicEntity) {
         // add a new operation
-        const nem = args.em.fork();
         const operation = new OperationEntity({
           name: cs.name,
           collection: cs.collection,
@@ -44,7 +44,7 @@ class OperationSubscriber implements EventSubscriber {
           payload: cs.payload,
           entityId: cs.entity.id,
           original: cs.originalEntity,
-          user: user ? nem.getReference<UserEntity>(UserEntity, user.id) : null,
+          user: userRef ? nem.getReference<UserEntity>(UserEntity, userRef.id) : null,
         });
         await nem.persist(operation).flush();
       }

@@ -16,7 +16,7 @@ class LoginInput {
 
 class LoginByEmail extends LoginInput {
   @IsEmail()
-  readonly email: string;
+  readonly identifier: string;
 }
 
 export { LoginByEmail };

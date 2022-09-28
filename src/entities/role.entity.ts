@@ -19,7 +19,6 @@ class RoleEntity extends OperationBasicEntity<RoleEntity, 'id'>{
   public code!: string;
 
   @Property({ comment: '是否可用', type: 'boolean' })
-  @Expose()
   public available = true;
 
   @Expose()

@@ -1,6 +1,6 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateSuperAdminByEmail } from './user.dto';
+import { CreateUserByEmail } from './user.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { Access } from '@/modules/auth';
 import { RoleTypes } from '@/modules/role';
@@ -14,13 +14,16 @@ export class UserController {
 
   @Access(RoleTypes.SuperAdmin)
   @Post('create-super-admin')
-  public async createSuperAdmin(@Body() body: CreateSuperAdminByEmail) {
+  public async createSuperAdmin(@Body() body: CreateUserByEmail) {
     return await this.userService.createSuperAdmin(body);
   }
 
   @Post('init-super-admin')
-  public async initSuperAdmin(@Body() body: CreateSuperAdminByEmail) {
+  public async initSuperAdmin(@Body() body: CreateUserByEmail) {
     const count = await this.userService.count({ roles: { code: RoleTypes.SuperAdmin } });
+    if (count > 0) {
+      throw new BadRequestException();
+    }
     return await this.userService.createSuperAdmin(body);
   }
 }

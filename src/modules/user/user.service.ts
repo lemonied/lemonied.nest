@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UserEntity, AccountEntity, RoleEntity } from '@/entities';
-import { CreateSuperAdminByEmail } from './user.dto';
+import { CreateUserByEmail } from './user.dto';
 import { EntityManager } from '@mikro-orm/mysql';
 import { FilterQuery } from '@mikro-orm/core';
 import { AccountType } from '@/modules/account';
@@ -12,15 +12,15 @@ export class UserService {
   constructor(
     private em: EntityManager,
   ) {}
-  public async createSuperAdmin(body: CreateSuperAdminByEmail) {
-    const { email, password, ...extra } = body;
+  public async createSuperAdmin(body: CreateUserByEmail) {
+    const { identifier, password, ...extra } = body;
     return await this.em.transactional(async (em) => {
       const user = new UserEntity(extra);
       const hash = bcrypt.hashSync(password, 10);
       user.accounts.add(
         new AccountEntity({
           type: AccountType.Email,
-          identifier: email,
+          identifier: identifier,
           password: hash,
         }),
       );
