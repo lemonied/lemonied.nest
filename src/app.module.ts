@@ -48,7 +48,6 @@ import { OperationModule } from '@/modules/operation';
 })
 export class AppModule implements NestModule{
   configure(consumer: MiddlewareConsumer): any {
-    consumer.apply(LoggingMiddleware)
-      .forRoutes('*');
+    consumer.apply(LoggingMiddleware).forRoutes('*');
   }
 }
