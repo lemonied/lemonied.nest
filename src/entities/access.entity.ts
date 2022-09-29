@@ -16,6 +16,14 @@ class AccessEntity extends OperationBasicEntity<AccessEntity, 'id'>{
   public type = AccessType.Api;
 
   @Expose()
+  @Property({ length: 32, comment: '副类型', nullable: true })
+  public subtype?: string;
+
+  @Expose()
+  @Property({ length: 64, comment: '描述', nullable: true })
+  public description?: string;
+
+  @Expose()
   @Property({ comment: '资源内容', nullable: true })
   public value?: string;
 

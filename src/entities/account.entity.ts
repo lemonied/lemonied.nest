@@ -3,6 +3,7 @@ import { OperationBasicEntity } from '@/orm';
 import { Expose } from 'class-transformer';
 import { AccountType } from '@/modules/account';
 import { UserEntity } from './user.entity';
+import { randomStr } from '@/shared/utils';
 
 @Entity({ tableName: 'accounts' })
 class AccountEntity extends OperationBasicEntity<AccountEntity, 'id'>{
@@ -21,8 +22,8 @@ class AccountEntity extends OperationBasicEntity<AccountEntity, 'id'>{
   @ManyToOne({ entity: () => UserEntity, comment: '关联用户' })
   public user!: UserEntity;
 
-  @Property({ length: 128, nullable: true, comment: '登录校验' })
-  public validation?: string;
+  @Property({ length: 128, comment: '登录校验', type: 'string' })
+  public validation = randomStr(Date.now());
 
   @Expose()
   @Property({ comment: '是否锁定', type: 'boolean' })

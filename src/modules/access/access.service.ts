@@ -10,7 +10,7 @@ class AccessService {
   constructor(
     private em: EntityManager,
   ) {}
-  public async getMenusByRoles(roles: EntityDTO<RoleEntity>[]) {
+  public async getList(roles: EntityDTO<RoleEntity>[], type: AccessType) {
     return await this.em.find(AccessEntity, {
       ...(
         roles.some(v => v.code === RoleTypes.SuperAdmin) ?
@@ -21,7 +21,7 @@ class AccessService {
             },
           }
       ),
-      type: AccessType.Url,
+      type,
     }, { populate: ['parent'] });
   }
 }

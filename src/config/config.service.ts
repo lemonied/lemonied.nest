@@ -17,7 +17,9 @@ class ConfigService {
   public readonly dbUser = process.env.DB_USER || 'root';
   public readonly dbPassword = process.env.DB_PASSWORD;
   public readonly dbName = process.env.DB_NAME;
-  public readonly jwtToken = '123';
+  public readonly jwtToken = process.env.JWT_TOKEN || 'ChickenMan';
+  public readonly jwtExpiresIn = Number(process.env.JWT_EXPIRES_IN || 1000 * 60 * 60 * 24 * 7);
+  public readonly jwtCookieName = 'jwt_token';
   public readonly prefix = process.env.BASE_PREFIX || '/api';
   public get isProduction() {
     return this.mode === 'production';

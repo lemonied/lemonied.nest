@@ -19,6 +19,7 @@ async function bootstrap() {
     exceptionFactory: (errors) => new ValidationException(errors),
   }));
   app.useLogger(app.get(LOGGER_PROVIDER));
+  app.enableShutdownHooks();
   setupSwagger(app);
 
   await app.listen(3001);

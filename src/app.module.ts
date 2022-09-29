@@ -12,6 +12,7 @@ import { AccessModule } from '@/modules/access';
 import { AccountModule } from '@/modules/account';
 import { UserEntity, RoleEntity, AccessEntity, AccountEntity } from '@/entities';
 import { OperationModule } from '@/modules/operation';
+import { SystemModule } from '@/modules/system';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { OperationModule } from '@/modules/operation';
     RoleModule,
     AccessModule,
     AccountModule,
+    SystemModule,
   ],
   controllers: [],
   providers: [

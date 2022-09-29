@@ -20,7 +20,6 @@ const config: MikroOrmModuleOptions = {
   loadStrategy: LoadStrategy.JOINED,
   // https://mikro-orm.io/docs/logging#highlighters
   highlighter: new SqlHighlighter(),
-  registerRequestContext: true,
   logger: message => LoggerModule.getLogger().debug(message, 'MikroOrmLog'),
 };
 

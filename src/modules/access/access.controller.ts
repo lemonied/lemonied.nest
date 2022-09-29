@@ -1,8 +1,9 @@
 import { ApiTags } from '@nestjs/swagger';
-import { Controller, Get, SerializeOptions, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, SerializeOptions, UseGuards } from '@nestjs/common';
 import { JwtGuard, User } from '@/modules/auth';
 import { UserEntity } from '@/entities';
 import { AccessService } from './access.service';
+import { AccessListParams } from '@/modules/access/access.dto';
 
 @ApiTags('Access')
 @Controller('access')
@@ -12,11 +13,11 @@ class AccessController {
     private accessService: AccessService,
   ) {}
 
-  @Get('menus')
+  @Get('list')
   @UseGuards(JwtGuard)
   @SerializeOptions({ groups: ['id'] })
-  public async getMenus(@User() user: UserEntity) {
-    return await this.accessService.getMenusByRoles(user.roles.toArray());
+  public async getMenus(@User() user: UserEntity, @Query() query: AccessListParams) {
+    return await this.accessService.getList(user.roles.toArray(), query.type);
   }
 }
 

@@ -31,6 +31,7 @@ export class UserService {
         user.roles.add(new RoleEntity({ code: RoleTypes.SuperAdmin }));
       }
       await em.persist(user).flush();
+      return user;
     });
   }
   public async findOne(query: FilterQuery<UserEntity>) {

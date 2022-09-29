@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AccountEntity, UserEntity } from '@/entities';
 import * as bcrypt from 'bcrypt';
-import { randomStr } from '@/shared/utils';
+import { setUserId } from '@/shared/utils';
 import { ExpiredException } from '@/shared/exceptions';
 import { EntityManager } from '@mikro-orm/mysql';
 import { JwtPayload } from './jwt.payload';
@@ -19,11 +19,6 @@ class AuthService {
   public async validateUser(identifier: string, password: string): Promise<JwtPayload> {
     const account = await this.em.findOne(AccountEntity, { identifier, locked: false, user: { locked: false } }, { populate: ['user'] });
     if (account && bcrypt.compareSync(password, account.password)) {
-      if (!account.validation) {
-        this.em.setFilterParams('userRef', { id: account.user.id });
-        account.validation = randomStr(Date.now());
-        await this.em.persistAndFlush(account);
-      }
       return {
         userId: account.user.id,
         accountId: account.id,
@@ -47,6 +42,7 @@ class AuthService {
     }
     const account = user.accounts.getItems()[0];
     if (account.validation === payload.validation) {
+      setUserId(user.id);
       return user;
     }
     throw new ExpiredException();
