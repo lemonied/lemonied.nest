@@ -10,9 +10,13 @@ import { AuthModule } from '@/modules/auth';
 import { RoleModule } from '@/modules/role';
 import { AccessModule } from '@/modules/access';
 import { AccountModule } from '@/modules/account';
-import { UserEntity, RoleEntity, AccessEntity, AccountEntity } from '@/entities';
+import {
+  UserEntity, RoleEntity, AccessEntity,
+  AccountEntity, OperationEntity, CommentEntity,
+} from '@/entities';
 import { OperationModule } from '@/modules/operation';
 import { SystemModule } from '@/modules/system';
+import { CommentModule } from '@/modules/comment';
 
 @Module({
   imports: [
@@ -23,6 +27,8 @@ import { SystemModule } from '@/modules/system';
       AccessEntity,
       RoleEntity,
       UserEntity,
+      OperationEntity,
+      CommentEntity,
     ]),
     LoggerModule.forRoot(),
     OperationModule,
@@ -32,6 +38,7 @@ import { SystemModule } from '@/modules/system';
     AccessModule,
     AccountModule,
     SystemModule,
+    CommentModule,
   ],
   controllers: [],
   providers: [

@@ -1,4 +1,4 @@
-import { Collection, Entity, Enum, ManyToMany, ManyToOne, Property } from '@mikro-orm/core';
+import { Collection, Entity, Enum, ManyToMany, ManyToOne, OneToMany, Property } from '@mikro-orm/core';
 import { OperationBasicEntity } from '@/orm';
 import { Expose, Transform } from 'class-transformer';
 import { AccessType } from '@/modules/access';
@@ -34,6 +34,10 @@ class AccessEntity extends OperationBasicEntity<AccessEntity, 'id'>{
   @Transform(params => (params.value as AccessEntity)?.id, { toPlainOnly: true })
   @ManyToOne({ entity: () => AccessEntity, nullable: true, comment: '父节点' })
   public parent?: AccessEntity;
+
+  @Expose()
+  @OneToMany({ entity: () => AccessEntity, mappedBy: access => access.parent, orphanRemoval: true, comment: '子节点' })
+  public children = new Collection<AccessEntity>(this);
 
   constructor(data: Partial<AccessEntity>) {
     super();
