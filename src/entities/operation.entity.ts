@@ -19,7 +19,7 @@ class OperationEntity extends BasicEntity<OperationEntity, 'id'> {
   @Property({ comment: '实体ID', nullable: true })
   public entityId?: number;
 
-  @Property({ type: JsonType, comment: '变更内容', nullable: true })
+  @Property({ type: JsonType, nullable: true, comment: '变更内容' })
   public payload?: any;
 
   @Property({ type: JsonType, nullable: true, comment: '原始数据' })

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, SerializeOptions, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { JwtGuard, User } from '@/modules/auth';
 import { CommentService } from './comment.service';
@@ -19,6 +19,7 @@ class CommentController {
     return await this.commentService.create(data, user);
   }
 
+  @SerializeOptions({ groups: ['id'] })
   @Get('list')
   public async list(@Query() query: GetCommentDTO) {
     const { limit, offset, ...extra } = query;

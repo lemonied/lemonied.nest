@@ -15,7 +15,7 @@ class CommentService {
   }
   public async getList(data: Partial<CommentEntity>, limit?: number, offset?: number) {
     return await this.em.findAndCount(CommentEntity, data, {
-      limit, offset, populate: ['user'],
+      limit, offset, populate: ['user', 'like'],
     });
   }
 }

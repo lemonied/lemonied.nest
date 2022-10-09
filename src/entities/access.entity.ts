@@ -31,7 +31,7 @@ class AccessEntity extends OperationBasicEntity<AccessEntity, 'id'>{
   public roles = new Collection<RoleEntity>(this);
 
   @Expose()
-  @Transform(params => (params.value as AccessEntity)?.id, { toPlainOnly: true })
+  @Transform(({ value }) => (value as AccessEntity)?.id, { toPlainOnly: true })
   @ManyToOne({ entity: () => AccessEntity, nullable: true, comment: '父节点' })
   public parent?: AccessEntity;
 

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Res, SerializeOptions, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
@@ -35,6 +35,7 @@ class AuthController {
     res.clearCookie(this.configService.jwtCookieName);
   }
 
+  @SerializeOptions({ groups: ['self'] })
   @Get('profile')
   @UseGuards(JwtGuard)
   async profile(@User() user: UserEntity) {

@@ -12,15 +12,14 @@ export class ReqPaginationDTO {
 }
 
 export class ResPaginationDTO<T=any> {
-  @Expose()
-  public data: T[];
+  data: T[];
 
   @Expose()
-  public total: number;
+  total: number;
 
   @Expose()
-  public limit: number;
+  limit: number;
 
   @Expose()
-  public offset: number;
+  offset: number;
 }

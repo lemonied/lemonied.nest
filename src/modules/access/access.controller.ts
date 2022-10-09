@@ -15,7 +15,6 @@ class AccessController {
 
   @Get('list')
   @UseGuards(JwtGuard)
-  @SerializeOptions({ groups: ['id'] })
   public async getMenus(@User() user: UserEntity, @Query() query: AccessListParams) {
     return await this.accessService.getList(user.roles.toArray(), query.type);
   }

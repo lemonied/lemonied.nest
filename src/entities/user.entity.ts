@@ -23,15 +23,26 @@ export class UserEntity extends OperationBasicEntity<UserEntity, 'id'> {
   @OneToMany({ entity: () => CommentEntity, mappedBy: comment => comment.user, orphanRemoval: true, comment: '评论' })
   public comments = new Collection<CommentEntity>(this);
 
+  @ManyToMany({ entity: () => CommentEntity, mappedBy: comment => comment.like, comment: '点赞' })
+  public like = new Collection<CommentEntity>(this);
+
+  @ManyToMany({ entity: () => CommentEntity, mappedBy: comment => comment.dislike, comment: '踩' })
+  public dislike = new Collection<CommentEntity>(this);
+
   @ApiProperty({ type: 'boolean' })
   @Property({ comment: '用户是否锁定', type: 'boolean' })
   public locked = false;
 
-  @Expose()
+  @Expose({ groups: ['self', 'admin'] })
   @Type(() => RoleEntity)
-  @Transform(params => (params.value as Collection<RoleEntity>)?.toArray(), { toPlainOnly: true })
+  @Transform(({ value }) => (value as Collection<RoleEntity>)?.toArray(), { toPlainOnly: true })
   @ManyToMany({ entity: () => RoleEntity, mappedBy: role => role.users, comment: '角色' })
   public roles = new Collection<RoleEntity>(this);
+
+  @Expose()
+  public get uid() {
+    return this.id;
+  }
 
   constructor(data: Partial<UserEntity>) {
     super();
